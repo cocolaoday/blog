@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>李明華 — 全端工程師</title>
+
+  <!-- Google Fonts: 標題用 Playfair Display，中文用 Noto Serif TC，內文用 DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Serif+TC:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================
+       CSS 自訂變數（設計系統）
+       =========================== */
+    :root {
+      --color-primary:   #2C3E50;   /* 深藍灰 — 主色 */
+      --color-accent:    #3498DB;   /* 亮藍   — 輔助色 */
+      --color-accent-dk: #217dbb;   /* 深版亮藍，用於 hover */
+      --color-bg:        #FFFFFF;   /* 白色背景 */
+      --color-surface:   #F7F9FC;   /* 淡灰面板 */
+      --color-muted:     #6B7A8D;   /* 次要文字 */
+      --color-border:    #E2E8F0;   /* 細線邊框 */
+
+      --font-display: 'Playfair Display', 'Noto Serif TC', serif;
+      --font-body:    'DM Sans', 'Noto Serif TC', sans-serif;
+
+      --nav-h: 68px;         /* 導航列高度 */
+      --radius-card: 14px;   /* 卡片圓角 */
+      --shadow-card: 0 4px 24px rgba(44,62,80,.08), 0 1px 4px rgba(44,62,80,.06);
+      --shadow-hover: 0 12px 40px rgba(44,62,80,.14), 0 2px 8px rgba(44,62,80,.08);
+      --transition: .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ===========================
+       重置 & 基礎樣式
+       =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;        /* 平滑捲動 */
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-primary);
+      background: var(--color-bg);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ===========================
+       頂部導航列（固定）
+       =========================== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    /* Logo 文字 */
+    .navbar__logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      letter-spacing: .02em;
+      margin-right: auto;     /* 推開右側連結 */
+      transition: color var(--transition);
+    }
+    .navbar__logo:hover { color: var(--color-accent); }
+
+    /* 導航連結群組 */
+    .navbar__links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .navbar__links a {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--color-muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color var(--transition);
+    }
+
+    /* 底線 hover 效果 */
+    .navbar__links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 2px;
+      background: var(--color-accent);
+      border-radius: 2px;
+      transition: width var(--transition);
+    }
+    .navbar__links a:hover { color: var(--color-primary); }
+    .navbar__links a:hover::after { width: 100%; }
+
+    /* 漢堡按鈕（手機版） */
+    .navbar__toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .navbar__toggle span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--color-primary);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ===========================
+       通用 Section 樣式
+       =========================== */
+    section {
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+    }
+
+    /* 置中容器 */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* Section 標題 */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* 標題底部藍色短線 */
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 48px; height: 3px;
+      background: var(--color-accent);
+      border-radius: 3px;
+      margin-top: .5rem;
+    }
+
+    /* Section 副標 */
+    .section-sub {
+      color: var(--color-muted);
+      margin-bottom: 3rem;
+      max-width: 520px;
+    }
+
+    /* ===========================
+       首頁橫幅區（Hero Section）
+       =========================== */
+    #home {
+      padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 5rem));
+      padding-bottom: clamp(4rem, 8vw, 6rem);
+      background: linear-gradient(135deg, #f0f5fb 0%, #ffffff 60%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 裝飾圓形背景 */
+    #home::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(52,152,219,.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+      flex-wrap: wrap;
+    }
+
+    /* 文字區塊 */
+    .hero__text { flex: 1 1 320px; }
+
+    /* 問候標籤 */
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(52,152,219,.1);
+      color: var(--color-accent);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 99px;
+      margin-bottom: 1.2rem;
+    }
+
+    /* 姓名大標題 */
+    .hero__name {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--color-primary);
+      margin-bottom: .8rem;
+    }
+
+    /* 職稱標語 */
+    .hero__tagline {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      color: var(--color-muted);
+      margin-bottom: 1.8rem;
+      font-weight: 300;
+      letter-spacing: .01em;
+    }
+
+    /* CTA 按鈕群 */
+    .hero__btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* 主要按鈕 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.75rem;
+      border-radius: 8px;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .btn--primary {
+      background: var(--color-accent);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(52,152,219,.3);
+    }
+    .btn--primary:hover {
+      background: var(--color-accent-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(52,152,219,.4);
+    }
+
+    /* 次要按鈕（外框） */
+    .btn--outline {
+      border: 1.5px solid var(--color-border);
+      color: var(--color-primary);
+      background: transparent;
+    }
+    .btn--outline:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      transform: translateY(-2px);
+    }
+
+    /* 頭像區塊 */
+    .hero__avatar-wrap {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* 圓形頭像 */
+    .hero__avatar {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--color-accent);
+      box-shadow: 0 8px 32px rgba(52,152,219,.2);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .hero__avatar:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 40px rgba(52,152,219,.3);
+    }
+
+    /* 頭像下方社群小圖示列 */
+    .hero__social {
+      display: flex;
+      gap: .8rem;
+    }
+    .hero__social a {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-border);
+      color: var(--color-muted);
+      font-size: .85rem;
+      transition: border-color var(--transition), color var(--transition), background var(--transition);
+    }
+    .hero__social a:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(52,152,219,.08);
+    }
+
+    /* 簡短介紹文字 */
+    .hero__intro {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+      max-width: 600px;
+      color: var(--color-muted);
+      font-size: .97rem;
+      line-height: 1.8;
+    }
+
+    /* ===========================
+       關於我（About Section）
+       =========================== */
+    #about {
+      background: var(--color-surface);
+    }
+
+    .about__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
+    }
+
+    .about__body {
+      color: var(--color-muted);
+      line-height: 1.9;
+    }
+    .about__body p + p { margin-top: 1rem; }
+
+    /* 技能標籤群 */
+    .about__skills { margin-top: 1.8rem; }
+
+    .about__skills-title {
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: .8rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+    }
+
+    .tag {
+      padding: .4rem 1rem;
+      border-radius: 99px;
+      font-size: .85rem;
+      font-weight: 500;
+      background: var(--color-bg);
+      color: var(--color-primary);
+      border: 1.5px solid var(--color-border);
+      transition: border-color var(--transition), color var(--transition), background var(--transition);
+    }
+    .tag:hover, .tag--active {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(52,152,219,.06);
+    }
+
+    /* 興趣愛好 */
+    .about__hobbies { margin-top: 1.8rem; }
+
+    .hobby-list {
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+      margin-top: .8rem;
+    }
+
+    .hobby-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .95rem;
+      color: var(--color-muted);
+    }
+
+    .hobby-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(52,152,219,.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* 關於我右側：統計數字 */
+    .about__stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .stat-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .stat-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-card__num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .stat-card__label {
+      font-size: .82rem;
+      color: var(--color-muted);
+      margin-top: .4rem;
+      letter-spacing: .03em;
+    }
+
+    /* ===========================
+       作品集（Portfolio Section）
+       =========================== */
+    #portfolio {
+      background: var(--color-bg);
+    }
+
+    .portfolio__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* 作品卡片 */
+    .project-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* hover 時放大 */
+    .project-card:hover {
+      transform: scale(1.025) translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(52,152,219,.25);
+    }
+
+    /* 作品縮圖 */
+    .project-card__img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+    }
+
+    .project-card__img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+    }
+    .project-card:hover .project-card__img { transform: scale(1.06); }
+
+    /* 作品分類標籤 */
+    .project-card__badge {
+      position: absolute;
+      top: .8rem; left: .8rem;
+      background: var(--color-accent);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .7rem;
+      border-radius: 99px;
+    }
+
+    /* 卡片內容 */
+    .project-card__body {
+      padding: 1.4rem 1.5rem 1.6rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card__title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: .5rem;
+    }
+
+    .project-card__desc {
+      font-size: .92rem;
+      color: var(--color-muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    /* 卡片底部連結 */
+    .project-card__footer {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      transition: gap var(--transition);
+    }
+    .project-link:hover { gap: .65rem; }
+
+    /* ===========================
+       聯絡（Contact Section）
+       =========================== */
+    #contact {
+      background: var(--color-surface);
+    }
+
+    .contact__grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .contact__text {
+      color: var(--color-muted);
+      font-size: .97rem;
+      line-height: 1.9;
+    }
+
+    /* 聯絡方式卡片列 */
+    .contact__cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+    .contact-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-card);
+      transform: translateX(4px);
+    }
+
+    .contact-card__icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(52,152,219,.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .contact-card__info {}
+
+    .contact-card__label {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    .contact-card__value {
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      margin-top: .1rem;
+    }
+
+    /* ===========================
+       頁腳（Footer）
+       =========================== */
+    footer {
+      background: var(--color-primary);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 1.8rem clamp(1.5rem, 5vw, 4rem);
+      font-size: .85rem;
+      letter-spacing: .02em;
+    }
+    footer strong { color: rgba(255,255,255,.85); }
+
+    /* ===========================
+       作品集：載入 / 錯誤狀態
+       =========================== */
+    .portfolio-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 3rem;
+      color: var(--color-muted);
+      font-size: .95rem;
+    }
+
+    /* 旋轉載入圈 */
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--color-border);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===========================
+       聯絡表單
+       =========================== */
+
+    /* 表單外層卡片 */
+    .contact-form-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .contact-form__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    /* 單個欄位 */
+    .form-field { margin-bottom: 1.1rem; }
+
+    .form-label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: .45rem;
+    }
+    .form-label span { color: var(--color-accent); }
+
+    .form-input {
+      width: 100%;
+      padding: .65rem .9rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .95rem;
+      color: var(--color-primary);
+      background: var(--color-bg);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-input:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(52,152,219,.15);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; }
+
+    /* 全寬按鈕 */
+    .btn--full { width: 100%; justify-content: center; margin-top: .4rem; }
+
+    /* 按鈕內旋轉小圈 */
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin-left: .4rem;
+    }
+
+    /* 送出回饋訊息 */
+    .form-feedback {
+      margin-top: 1rem;
+      padding: .8rem 1rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 500;
+    }
+    .form-feedback--success {
+      background: rgba(39,174,96,.1);
+      color: #1e8449;
+      border: 1px solid rgba(39,174,96,.25);
+    }
+    .form-feedback--error {
+      background: rgba(231,76,60,.08);
+      color: #c0392b;
+      border: 1px solid rgba(231,76,60,.2);
+    }
+
+    /* ===========================
+       頁面載入動畫
+       =========================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim { animation: fadeUp .6s ease both; }
+    .anim--d1 { animation-delay: .1s; }
+    .anim--d2 { animation-delay: .25s; }
+    .anim--d3 { animation-delay: .4s; }
+    .anim--d4 { animation-delay: .55s; }
+
+    /* ===========================
+       響應式設計（RWD）
+       =========================== */
+    @media (max-width: 768px) {
+
+      /* 手機版導航：隱藏連結，顯示漢堡鈕 */
+      .navbar__links {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--color-bg);
+        border-bottom: 1px solid var(--color-border);
+        flex-direction: column;
+        gap: 0;
+        padding: 1rem 0;
+      }
+      .navbar__links.is-open { display: flex; }
+      .navbar__links a {
+        padding: .75rem clamp(1.5rem, 5vw, 4rem);
+        font-size: 1rem;
+      }
+      .navbar__links a::after { display: none; }
+      .navbar__toggle { display: flex; }
+
+      /* 英雄區：直向排列 */
+      .hero { flex-direction: column-reverse; text-align: center; }
+      .hero__btns { justify-content: center; }
+      .hero__intro { text-align: left; }
+
+      /* 關於我：單欄 */
+      .about__grid { grid-template-columns: 1fr; }
+      .about__stats { grid-template-columns: repeat(4, 1fr); }
+
+      /* 聯絡：單欄 */
+      .contact__grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .about__stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================
+       頂部導航列（固定）
+       ===================== -->
+  <nav class="navbar" role="navigation" aria-label="主要導航">
+    <!-- Logo -->
+    <a href="#home" class="navbar__logo">LMH.</a>
+
+    <!-- 漢堡按鈕（手機版） -->
+    <button class="navbar__toggle" id="navToggle" aria-label="開啟選單" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- 導航連結 -->
+    <ul class="navbar__links" id="navLinks" role="list">
+      <li><a href="#home">首頁</a></li>
+      <li><a href="#about">關於我</a></li>
+      <li><a href="#portfolio">作品集</a></li>
+      <li><a href="#contact">聯絡</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- =====================
+         首頁橫幅（Hero）
+         ===================== -->
+    <section id="home" aria-label="首頁橫幅">
+      <div class="hero">
+
+        <!-- 文字區塊 -->
+        <div class="hero__text">
+          <span class="hero__tag anim anim--d1">👋 歡迎來到我的個人網站</span>
+
+          <!-- 姓名大標 -->
+          <h1 class="hero__name anim anim--d2">李明華</h1>
+
+          <!-- 職稱標語 -->
+          <p class="hero__tagline anim anim--d3">
+            全端工程師 &nbsp;|&nbsp; 熱愛創造美好的數位體驗
+          </p>
+
+          <!-- CTA 按鈕 -->
+          <div class="hero__btns anim anim--d4">
+            <a href="#portfolio" class="btn btn--primary">
+              ✦ 查看作品集
+            </a>
+            <a href="#contact" class="btn btn--outline">
+              聯絡我
+            </a>
+          </div>
+
+          <!-- 簡短介紹段落 -->
+          <p class="hero__intro anim anim--d4">
+            我是一位擁有五年以上經驗的全端工程師，專注於打造兼具效能與美感的數位產品。<br/>
+            熟悉前後端整合開發，對 UI/UX 設計有濃厚熱情，<br/>
+            相信好的技術應該讓使用者感受不到技術的存在。
+          </p>
+        </div>
+
+        <!-- 頭像區塊 -->
+        <div class="hero__avatar-wrap anim anim--d2">
+          <!-- 圓形頭像（placeholder） -->
+          <img
+            class="hero__avatar"
+            src="https://placehold.co/200x200/3498DB/FFFFFF?text=李明華"
+            alt="李明華 個人照片"
+            width="200" height="200"
+          />
+
+          <!-- 社群圖示 -->
+          <div class="hero__social" aria-label="社群媒體連結">
+            <!-- Email -->
+            <a href="mailto:minghua@example.com" aria-label="Email" title="Email">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </a>
+            <!-- GitHub -->
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================
+         關於我（About）
+         ===================== -->
+    <section id="about" aria-label="關於我">
+      <div class="container">
+        <h2 class="section-title">關於我</h2>
+        <p class="section-sub">了解我的背景、技術專長和生活興趣</p>
+
+        <div class="about__grid">
+
+          <!-- 左側：文字介紹 + 技能 + 興趣 -->
+          <div>
+            <div class="about__body">
+              <p>
+                我是李明華，畢業於國立台灣大學資訊工程學系，目前任職於一家科技新創擔任全端工程師。
+                在這五年多的職涯中，我參與了超過二十個大小不一的專案，從電商平台到 SaaS 工具，
+                積累了豐富的實戰經驗。
+              </p>
+              <p>
+                技術上，我熟悉 JavaScript 全端開發生態，前端使用 React、Next.js 打造高效能介面，
+                後端以 Node.js 搭配 PostgreSQL 構建穩健的 API 服務。
+                同時，我對 UI/UX 設計充滿熱情，深信「好的設計應該讓使用者感受不到設計本身」。
+              </p>
+              <p>
+                工作之餘，我喜歡用攝影記錄生活中的美好片刻，偶爾揹起登山包到山林中充電，
+                也保持每週閱讀的習慣，讓文字帶給我不同的視角。
+              </p>
+            </div>
+
+            <!-- 技能標籤 -->
+            <div class="about__skills">
+              <p class="about__skills-title">技術技能</p>
+              <div class="tags" role="list">
+                <span class="tag tag--active" role="listitem">JavaScript</span>
+                <span class="tag" role="listitem">TypeScript</span>
+                <span class="tag tag--active" role="listitem">React</span>
+                <span class="tag" role="listitem">Next.js</span>
+                <span class="tag tag--active" role="listitem">Node.js</span>
+                <span class="tag" role="listitem">PostgreSQL</span>
+                <span class="tag tag--active" role="listitem">UI/UX Design</span>
+                <span class="tag" role="listitem">Figma</span>
+              </div>
+            </div>
+
+            <!-- 興趣愛好 -->
+            <div class="about__hobbies">
+              <p class="about__skills-title">興趣愛好</p>
+              <ul class="hobby-list" role="list">
+                <li class="hobby-item">
+                  <span class="hobby-icon">📚</span>
+                  <span>閱讀 — 科技、設計、人文哲學類書籍</span>
+                </li>
+                <li class="hobby-item">
+                  <span class="hobby-icon">📷</span>
+                  <span>攝影 — 街頭紀實與風景攝影</span>
+                </li>
+                <li class="hobby-item">
+                  <span class="hobby-icon">⛰️</span>
+                  <span>登山 — 台灣百岳已完攀三十餘座</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 右側：統計數字卡片 -->
+          <div class="about__stats" aria-label="個人成就統計">
+            <article class="stat-card">
+              <p class="stat-card__num">5+</p>
+              <p class="stat-card__label">年開發<br/>經驗</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-card__num">20+</p>
+              <p class="stat-card__label">完成<br/>專案</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-card__num">8</p>
+              <p class="stat-card__label">技術<br/>專長</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-card__num">30+</p>
+              <p class="stat-card__label">百岳<br/>完攀</p>
+            </article>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================
+         作品集（Portfolio）— 從 Supabase 動態載入
+         ===================== -->
+    <section id="portfolio" aria-label="作品集">
+      <div class="container">
+        <h2 class="section-title">作品集</h2>
+        <p class="section-sub">精選代表性專案，涵蓋全端開發與設計</p>
+
+        <!-- 載入中狀態 -->
+        <div id="portfolio-loading" class="portfolio-state" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>載入作品中…</p>
+        </div>
+
+        <!-- 錯誤狀態 -->
+        <div id="portfolio-error" class="portfolio-state" style="display:none" aria-live="assertive">
+          <p>⚠️ 無法載入作品，請稍後再試。</p>
+        </div>
+
+        <!-- 作品卡片容器（由 JS 動態填入） -->
+        <div class="portfolio__grid" id="portfolio-grid" style="display:none"></div>
+      </div>
+    </section>
+
+
+    <!-- =====================
+         聯絡（Contact）— 表單寫入 Supabase
+         ===================== -->
+    <section id="contact" aria-label="聯絡我">
+      <div class="container">
+        <h2 class="section-title">聯絡我</h2>
+        <p class="section-sub">有合作機會或想聊聊？歡迎隨時與我聯繫！</p>
+
+        <div class="contact__grid">
+
+          <!-- 左側：聯絡方式卡片 -->
+          <div class="contact__cards" aria-label="聯絡方式列表">
+            <p class="contact__text" style="margin-bottom:1.2rem">
+              無論是全端開發合作、UI/UX 設計諮詢，或是單純想聊聊技術，
+              我都非常歡迎。通常會在 48 小時內回覆！
+            </p>
+
+            <a href="mailto:minghua@example.com" class="contact-card">
+              <div class="contact-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div class="contact-card__info">
+                <p class="contact-card__label">Email</p>
+                <p class="contact-card__value">minghua@example.com</p>
+              </div>
+            </a>
+
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="contact-card">
+              <div class="contact-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+              </div>
+              <div class="contact-card__info">
+                <p class="contact-card__label">GitHub</p>
+                <p class="contact-card__value">github.com/minghua-li</p>
+              </div>
+            </a>
+
+            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" class="contact-card">
+              <div class="contact-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3498DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </div>
+              <div class="contact-card__info">
+                <p class="contact-card__label">LinkedIn</p>
+                <p class="contact-card__value">linkedin.com/in/minghua-li</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- 右側：聯絡表單（送出至 Supabase contacts 表） -->
+          <div class="contact-form-wrap">
+            <div class="contact-form-card">
+              <p class="contact-form__title">傳送訊息給我</p>
+
+              <!-- 姓名 -->
+              <div class="form-field">
+                <label class="form-label" for="cf-name">姓名 <span aria-hidden="true">*</span></label>
+                <input class="form-input" id="cf-name" type="text" placeholder="你的姓名" required />
+              </div>
+
+              <!-- Email -->
+              <div class="form-field">
+                <label class="form-label" for="cf-email">Email <span aria-hidden="true">*</span></label>
+                <input class="form-input" id="cf-email" type="email" placeholder="your@email.com" required />
+              </div>
+
+              <!-- 訊息 -->
+              <div class="form-field">
+                <label class="form-label" for="cf-message">訊息 <span aria-hidden="true">*</span></label>
+                <textarea class="form-input form-textarea" id="cf-message" rows="4" placeholder="想說什麼都可以…" required></textarea>
+              </div>
+
+              <!-- 送出按鈕 -->
+              <button class="btn btn--primary btn--full" id="cf-submit" type="button">
+                <span id="cf-btn-text">送出訊息</span>
+                <span id="cf-btn-spinner" class="btn-spinner" style="display:none" aria-hidden="true"></span>
+              </button>
+
+              <!-- 回饋訊息 -->
+              <div id="cf-feedback" class="form-feedback" role="alert" aria-live="polite" style="display:none"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================
+       頁腳（Footer）
+       ===================== -->
+  <footer role="contentinfo">
+    <p>© 2025 <strong>李明華</strong> &nbsp;·&nbsp; 以 ♡ 和 ☕ 製作 &nbsp;·&nbsp; 保留所有權利</p>
+  </footer>
+
+
+  <!-- =====================
+       Supabase JS SDK（CDN）
+       ===================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- =====================
+       JavaScript：導航 + Supabase 整合
+       ===================== -->
+  <script>
+    /* ── 1. Supabase 初始化 ─────────────────────────────── */
+    const { createClient } = supabase
+    const db = createClient(
+      'https://tagtgepozrbaretwqaxa.supabase.co',
+      'sb_publishable_PY2Yfxh5eWRTJI-TAAvq_w_-rjE3jyf'
+    )
+
+    /* ── 2. 漢堡選單 ────────────────────────────────────── */
+    const toggle  = document.getElementById('navToggle')
+    const navMenu = document.getElementById('navLinks')
+
+    toggle.addEventListener('click', () => {
+      const isOpen = navMenu.classList.toggle('is-open')
+      toggle.setAttribute('aria-expanded', isOpen)
+    })
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('is-open')
+        toggle.setAttribute('aria-expanded', 'false')
+      })
+    })
+
+    /* ── 3. 作品集：從 Supabase `projects` 表動態載入 ───── */
+    async function loadProjects() {
+      const loadingEl = document.getElementById('portfolio-loading')
+      const errorEl   = document.getElementById('portfolio-error')
+      const gridEl    = document.getElementById('portfolio-grid')
+
+      try {
+        const { data: projects, error } = await db
+          .from('projects')          // 資料表名稱
+          .select('*')
+          .order('sort_order', { ascending: true })  // 可在 DB 設定排序欄位
+
+        if (error) throw error
+
+        // 若資料庫還沒資料，顯示預設卡片（fallback）
+        const items = projects?.length ? projects : FALLBACK_PROJECTS
+
+        gridEl.innerHTML = items.map(p => `
+          <article class="project-card">
+            <div class="project-card__img-wrap">
+              <img
+                class="project-card__img"
+                src="${p.image_url || `https://placehold.co/600x338/2C3E50/FFFFFF?text=${encodeURIComponent(p.title)}`}"
+                alt="${escHtml(p.title)} 截圖"
+                loading="lazy"
+              />
+              ${p.badge ? `<span class="project-card__badge">${escHtml(p.badge)}</span>` : ''}
+            </div>
+            <div class="project-card__body">
+              <h3 class="project-card__title">${escHtml(p.title)}</h3>
+              <p class="project-card__desc">${escHtml(p.description)}</p>
+              <footer class="project-card__footer">
+                ${p.demo_url  ? `<a href="${p.demo_url}"  target="_blank" rel="noopener noreferrer" class="project-link">線上展示 →</a>` : ''}
+                ${p.github_url ? `<a href="${p.github_url}" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a>` : ''}
+              </footer>
+            </div>
+          </article>
+        `).join('')
+
+        loadingEl.style.display = 'none'
+        gridEl.style.display    = ''
+
+      } catch (err) {
+        console.error('載入作品集失敗：', err)
+        loadingEl.style.display = 'none'
+        errorEl.style.display   = ''
+      }
+    }
+
+    /* 防 XSS 小工具 */
+    function escHtml(str = '') {
+      return String(str).replace(/[&<>"']/g, c =>
+        ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])
+      )
+    }
+
+    /* 若 Supabase 資料表尚未建立，先用這些 fallback 資料顯示 */
+    const FALLBACK_PROJECTS = [
+      {
+        title: 'ShopFlow 電商平台',
+        description: '以 Next.js + Node.js 打造的高效能電商解決方案，支援多商家入駐、即時庫存管理與智慧推薦系統。',
+        badge: '全端開發',
+        image_url: 'https://placehold.co/600x338/2C3E50/FFFFFF?text=ShopFlow',
+        demo_url: '#', github_url: 'https://github.com/'
+      },
+      {
+        title: 'TaskPilot 任務協作工具',
+        description: '結合 React 與 WebSocket 的即時協作看板，支援拖曳式任務管理、自動化工作流程與多人同步編輯。',
+        badge: 'SaaS 應用',
+        image_url: 'https://placehold.co/600x338/3498DB/FFFFFF?text=TaskPilot',
+        demo_url: '#', github_url: 'https://github.com/'
+      },
+      {
+        title: 'SnapLog 攝影日誌',
+        description: '為攝影愛好者設計的作品管理平台，整合 AI 自動標記、GPS 路線地圖與拍攝參數記錄功能。',
+        badge: '個人專案',
+        image_url: 'https://placehold.co/600x338/1ABC9C/FFFFFF?text=SnapLog',
+        demo_url: '#', github_url: 'https://github.com/'
+      }
+    ]
+
+    /* ── 4. 聯絡表單：寫入 Supabase `contacts` 表 ────────── */
+    document.getElementById('cf-submit').addEventListener('click', async () => {
+      const nameEl    = document.getElementById('cf-name')
+      const emailEl   = document.getElementById('cf-email')
+      const messageEl = document.getElementById('cf-message')
+      const btnText   = document.getElementById('cf-btn-text')
+      const btnSpinner= document.getElementById('cf-btn-spinner')
+      const feedback  = document.getElementById('cf-feedback')
+
+      const name    = nameEl.value.trim()
+      const email   = emailEl.value.trim()
+      const message = messageEl.value.trim()
+
+      // 前端驗證
+      if (!name || !email || !message) {
+        showFeedback(feedback, '請填寫所有必填欄位。', 'error')
+        return
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showFeedback(feedback, '請輸入有效的 Email 格式。', 'error')
+        return
+      }
+
+      // 送出中狀態
+      btnText.textContent = '送出中…'
+      btnSpinner.style.display = 'inline-block'
+      document.getElementById('cf-submit').disabled = true
+      feedback.style.display = 'none'
+
+      try {
+        const { error } = await db
+          .from('contacts')          // 資料表名稱
+          .insert({ name, email, message })
+
+        if (error) throw error
+
+        // 成功
+        showFeedback(feedback, '✅ 訊息已送出！我會盡快回覆你。', 'success')
+        nameEl.value = emailEl.value = messageEl.value = ''
+
+      } catch (err) {
+        console.error('送出失敗：', err)
+        showFeedback(feedback, '❌ 送出失敗，請稍後再試或直接 Email 我。', 'error')
+      } finally {
+        btnText.textContent = '送出訊息'
+        btnSpinner.style.display = 'none'
+        document.getElementById('cf-submit').disabled = false
+      }
+    })
+
+    function showFeedback(el, msg, type) {
+      el.textContent = msg
+      el.className   = `form-feedback form-feedback--${type}`
+      el.style.display = ''
+    }
+
+    /* ── 5. 啟動 ──────────────────────────────────────────── */
+    loadProjects()
+  </script>
+
+</body>
+</html>
